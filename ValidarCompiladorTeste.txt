@@ -1,14 +1,5 @@
 main(){
-integer #a, #b2;
-decimal #cc[2.5];
-integer #d, #b;
-string #teste[123];
-#b2 = #a;
-puts("Escreva um número @");
-gets (#a);
-if (#a <= #b2)
-puts(" A e maior", #a)      ;
-else puts("B e maior@", #b);
-puts("D", #d);
+
 }
-}@
+
+main(){}

@@ -2,4 +2,4 @@ default: build
 
 # Faz o Build
 build:
-	@gcc compilador-sergio.c -o compilador && ./compilador
+	@gcc CompiladorAndre.c -o CompiladorAndre && ./CompiladorAndre
