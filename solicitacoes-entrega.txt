@@ -1,0 +1,14 @@
+Compilador Entrega 1.1
+Abrir um arquivo externo, ler, comparar usando a Tabela ASCII 
+e informar caractere a caractere se faz parte da tabela de literais 
+(composta por todos os caracteres que podem ser utilizados na linguagem). 
+Se em algum momento encontrar um caractere que não é válido finalizar a execução 
+e mostrar o erro conforme especificação. Fazer o controle de memória.
+
+
+2ª e última entrega 18/03/2020 - Verificar se a junção de caracteres,
+utilizando os delimitadores de cada estrutura, forma algum token válido - classifica-lo,
+se for um identificador de usuário inseri-lo na tabela de símbolos 
+(É importante verificar se já não existe na tabela de símbolos.). 
+Se em algum momento encontrar uma palavra que não se encaixa em uma das classificações de 
+token válidos é necessário finalizar a execução e mostrar o erro conforme especificação.

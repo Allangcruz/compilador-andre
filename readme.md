@@ -1,0 +1,1 @@
+gcc compilador.c -o compilador && ./compilador
