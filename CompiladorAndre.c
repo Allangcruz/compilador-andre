@@ -391,6 +391,10 @@ void mostrarErrorValidacao(int nuLinha, int tipoErro, char *palavra) {
 		printf("VARIAVEL (%s) JA FOI DECLARADA ANTERIORMENTE. [LINHA => %i].\n", palavra, nuLinha);
 	} else if (tipoErro == 7) {
 		printf("VARIAVEL (%s) NAO DECLARADA. [LINHA => %i].\n", palavra, nuLinha);
+	} else if (tipoErro == 8) {
+		printf("TODA DEFINICAO DE PUTS REQUER FINALIZACAO COM ';' EM (%s). [LINHA => %i].\n", palavra, nuLinha);
+	} else if (tipoErro == 9) {
+		printf("TODA DEFINICAO DE GETS REQUER FINALIZACAO COM ';' EM (%s). [LINHA => %i].\n", palavra, nuLinha);
 	} else {
 		printf("\nERROR NAO EXISTE.\n");
 	}
@@ -500,14 +504,14 @@ int verificarCaracteresEspeciaisValidos(int ascii) {
     return 1;
 }
 
+/**
+ * Verifica se o caracter informado pertence a tabela de literais
+ */
 void verificarLiterais(char *palavra, int nuLinha) {
 	int i = 0, ascii;
 
 	for (i = 0; i <= strlen(palavra); i++) {
 		ascii = (int) palavra[i];
-
-		// numeros (0-9) && alfabeto a-z, A-Z
-		// printf("Debug => (%s) - (%i) - (%i) - (%c) - (%i) - (%i) - (%i)\n", palavra, nuLinha, ascii, (char) ascii, (ascii >= 48 && ascii <= 57), ((ascii >= 65 && ascii <= 90) && (ascii >= 97 && ascii <= 122)), verificarCaracteresEspeciaisValidos(ascii));
 		if (! (ascii >= 48 && ascii <= 57) && !((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122)) && (verificarCaracteresEspeciaisValidos(ascii) == 0)) {
 			printf("\n(%c) NAO É LITERAIS VALIDO.\n", palavra[i]);
 			mostrarErrorValidacao(nuLinha, 0, palavra);
@@ -517,7 +521,9 @@ void verificarLiterais(char *palavra, int nuLinha) {
 }
 
 // ------------------------------------------------------------------------------------
-// FUNCOES DE LISTA ENCADEADA (https://programacaodescomplicada.wordpress.com/complementar/)
+/**
+ * Funcoes de lista encadeada baseada no link https://programacaodescomplicada.wordpress.com/complementar/
+ */
 TabelaSimbolo* criaListaTabelaSimbolo() {
     TabelaSimbolo* lista = (TabelaSimbolo*) malloc(sizeof(TabelaSimbolo));
 
@@ -528,6 +534,9 @@ TabelaSimbolo* criaListaTabelaSimbolo() {
     return lista;
 }
 
+/**
+ * Libera a memoria consumida
+ */
 void liberaListaTabelaSimbolo(TabelaSimbolo* lista) {
     if (lista != NULL) {
         ElemSimbolo* no;
@@ -542,6 +551,9 @@ void liberaListaTabelaSimbolo(TabelaSimbolo* lista) {
     }
 }
 
+/**
+ * Inseri no final da tabela de simbolos
+ */
 int insereFinalTabelaSimbolo(TabelaSimbolo* lista, Simbolo simbolo) {
     if (lista == NULL) {
         return 0;
@@ -572,6 +584,9 @@ int insereFinalTabelaSimbolo(TabelaSimbolo* lista, Simbolo simbolo) {
     return 1;
 }
 
+/**
+ * Verifica o tamanho da tabela de simbolos
+ */
 int tamanhoTabelaSimbolo(TabelaSimbolo* lista) {
     if (lista == NULL) {
         return 0;
@@ -588,6 +603,9 @@ int tamanhoTabelaSimbolo(TabelaSimbolo* lista) {
     return cont;
 }
 
+/**
+ * Verifica se a tabela esta vazia
+ */
 int isVazioTabelaSimbolo(TabelaSimbolo* lista) {
 	int isVazio = 0;
 
@@ -602,6 +620,9 @@ int isVazioTabelaSimbolo(TabelaSimbolo* lista) {
     return isVazio;
 }
 
+/**
+ * Imprime a tabela de simbolos
+ */
 void imprimeTabelaSimbolo(TabelaSimbolo* lista) {
     if (lista == NULL) {
         return;
@@ -721,9 +742,27 @@ void verificarAnalises(FILE *arquivo, TabelaSimbolo* simbolos) {
 							if (strcmp(palavraAuxiliar, "main") == 0) {
 								isMainExistente ++;
 								verificarMainValido(conteudoPorCaracter, nuLinha);
+
+								if (isMainExistente > 1) {
+									printf("FUNCAO 'main' JA FOI DECLARADA ANTERIORMENTE: (LINHA => %i) (%s).\n", nuLinha, conteudoPorCaracter);
+									exit(0);
+								}
+							}
+
+							if (strcmp(palavraAuxiliar, "gets") == 0) {
+								if (! verificarPontoVingula(conteudoPorCaracter, nuLinha)) {
+									mostrarErrorValidacao(nuLinha, 9, conteudoLinha);
+								}
+							}
+
+							if (strcmp(palavraAuxiliar, "puts") == 0) {
+								if (! verificarPontoVingula(conteudoPorCaracter, nuLinha)) {
+									mostrarErrorValidacao(nuLinha, 8, conteudoLinha);
+								}
 							}
 						}
 
+						// Validar palavras auxiliar
 						if (strlen(palavraAuxiliar) > 0) {
 							if (!isVariavelValida && !isReservadaValida) {
 								mostrarErrorValidacao(nuLinha, 1, palavraAuxiliar);

@@ -1,5 +1,7 @@
 main(){
+    integer #0;
+    string #nome;
 
+    puts(#nome);
 }
 
-main(){}
